@@ -1,5 +1,5 @@
 @extends('main')
-@section('title', 'Beranda')
+@section('title', 'Peminjaman')
 @section('content')
     <x-member_navbar />
     <main class="pt-30 pl-60 flex gap-10">
