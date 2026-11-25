@@ -31,8 +31,8 @@ return new class extends Migration
 
         Schema::create('borrowings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete(); // Anggota
-            $table->foreignId('staff_id')->nullable()->constrained('users')->nullOnDelete(); // Petugas yang memproses
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('staff_id')->nullable()->constrained('users')->nullOnDelete();
             $table->date('borrow_date');
             $table->date('due_date')->nullable();
             $table->date('return_date')->nullable();
@@ -50,10 +50,10 @@ return new class extends Migration
 
         Schema::create('fines', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete(); // Anggota
-            $table->foreignId('borrowing_id')->nullable()->constrained('borrowings')->nullOnDelete(); // Transaksi terkait
-            $table->foreignId('staff_id')->nullable()->constrained('users')->nullOnDelete(); // Petugas pemberi denda
-            $table->json('violations'); // Array daftar pelanggaran, misal: ["Merusak Buku", "Terlambat Mengembalikan"]
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('borrowing_id')->nullable()->constrained('borrowings')->nullOnDelete();
+            $table->foreignId('staff_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->json('violations');
             $table->unsignedBigInteger('total_amount');
             $table->enum('status', ['unpaid', 'paid'])->default('unpaid');
             $table->timestamps();

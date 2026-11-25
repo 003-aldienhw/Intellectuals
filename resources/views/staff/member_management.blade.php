@@ -84,8 +84,9 @@
                     <div>
                         <label class="block mb-1 font-bold">Status</label>
                         <select name="status" class="w-full bg-[#D9D9D9] text-[#000315] h-10 px-3 rounded-lg">
-                            <option value="Aktif" {{ $member->status === 'Aktif' ? 'selected' : '' }}>Aktif</option>
-                            <option value="Nonaktif" {{ $member->status === 'Nonaktif' ? 'selected' : '' }}>Nonaktif</option>
+                            <option value="Murid" {{ ($member->status ?? '') === 'Murid' ? 'selected' : '' }}>Murid</option>
+                            <option value="Guru" {{ ($member->status ?? '') === 'Guru' ? 'selected' : '' }}>Guru</option>
+                            <option value="Tamu" {{ ($member->status ?? '') === 'Tamu' ? 'selected' : '' }}>Tamu</option>
                         </select>
                     </div>
                     <div>

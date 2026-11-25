@@ -6,6 +6,7 @@ use App\Models\Book;
 use App\Models\Borrowing;
 use App\Models\BorrowingDetail;
 use App\Models\Category;
+use App\Models\Fine;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -88,12 +89,31 @@ class MemberController extends Controller
 
     public function history()
     {
+        $user = Auth::user();
+
         $borrowings = Borrowing::with(['details.book.category'])
-            ->where('user_id', Auth::id())
+            ->where('user_id', $user->id)
             ->latest()
             ->get();
 
-        return view('member.history', compact('borrowings'));
+        $fines = Fine::with(['borrowing.details.book.category'])
+            ->where('user_id', $user->id)
+            ->latest()
+            ->get();
+
+        $unpaidFines = $fines->where('status', 'unpaid');
+
+        return view('member.history', compact('borrowings', 'fines', 'unpaidFines'));
+    }
+
+    public function fineDetails(Fine $fine)
+    {
+        abort_if($fine->user_id !== Auth::id(), 403);
+        $fine->load(['borrowing.details.book.category']);
+
+        $book = $fine->borrowing?->details->first()?->book;
+
+        return view('member.fine_details', compact('fine', 'book'));
     }
 
     public function returning()

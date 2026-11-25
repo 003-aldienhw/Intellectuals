@@ -31,7 +31,7 @@ class StaffMemberController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255', 'unique:users,name'],
             'phone' => ['nullable', 'string', 'max:25'],
-            'status' => ['required', 'in:Aktif,Nonaktif'],
+            'status' => ['required', 'in:Murid,Guru,Tamu'],
             'password' => ['required', 'string', 'min:4'],
         ]);
 
@@ -74,7 +74,7 @@ class StaffMemberController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255', 'unique:users,name,'.$member->id],
             'phone' => ['nullable', 'string', 'max:25'],
-            'status' => ['required', 'in:Aktif,Nonaktif'],
+            'status' => ['required', 'in:Murid,Guru,Tamu'],
             'password' => ['nullable', 'string', 'min:4'],
         ]);
 

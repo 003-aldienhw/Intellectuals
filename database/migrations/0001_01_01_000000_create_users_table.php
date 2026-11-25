@@ -10,11 +10,11 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('member_code')->unique(); // Contoh: A0104092008 / P0104092008
-            $table->string('name')->unique();        // Dipakai untuk login
+            $table->string('member_code')->unique();
+            $table->string('name')->unique();
             $table->string('email')->nullable()->unique();
             $table->string('phone')->nullable();
-            $table->enum('role', ['anggota', 'petugas'])->default('anggota');
+            $table->enum('status', ['Murid', 'Guru', 'Tamu', 'Petugas'])->default('Murid');
             $table->enum('status', ['Aktif', 'Nonaktif'])->default('Aktif');
             $table->string('avatar')->nullable();
             $table->string('password');

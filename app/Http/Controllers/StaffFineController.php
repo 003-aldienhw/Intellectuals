@@ -16,7 +16,13 @@ class StaffFineController extends Controller
 
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->whereHas('member', fn ($q) => $q->where('name', 'like', "%{$search}%"));
+            $query->where(function ($q) use ($search) {
+                $q->where('violations', 'like', "%{$search}%")
+                  ->orWhereHas('member', function ($m) use ($search) {
+                      $m->where('name', 'like', "%{$search}%")
+                        ->orWhere('member_code', 'like', "%{$search}%");
+                    });
+            });
         }
 
         $fines = $query->get();

@@ -6,7 +6,7 @@
 
     <div class="flex flex-col w-full mt-20">
         <a href="{{ route('member.home') }}" class="flex text-lg h-20 items-center justify-center transition {{ request()->routeIs('member.home', 'member.borrowing.*') ? $active_style : 'hover:bg-[#213FFF]/40' }}">Beranda</a>
-        <a href="{{ route('member.history') }}" class="flex text-lg h-20 items-center justify-center transition {{ request()->routeIs('member.history') ? $active_style : 'hover:bg-[#213FFF]/40' }}">History</a>
+        <a href="{{ route('member.history') }}" class="flex text-lg h-20 items-center justify-center transition {{ request()->routeIs('member.history', 'member.fine.*') ? $active_style : 'hover:bg-[#213FFF]/40' }}">History</a>
         <a href="{{ route('member.returning') }}" class="flex text-lg h-20 items-center justify-center transition {{ request()->routeIs('member.returning*') ? $active_style : 'hover:bg-[#213FFF]/40' }}">Pengembalian</a>
     </div>
 </nav>

@@ -27,6 +27,8 @@ Route::middleware(['auth', 'role:anggota'])->prefix('anggota')->name('member.')-
     Route::get('/pengembalian/{borrowing}', [MemberController::class, 'returningDetails'])->name('returning.details');
     Route::post('/pengembalian/{borrowing}/ajukan', [MemberController::class, 'requestReturn'])->name('returning.request');
 
+    Route::get('/denda/{fine}', [MemberController::class, 'fineDetails'])->name('fine.details');
+
     Route::get('/profil', [MemberController::class, 'profile'])->name('profile');
 });
 

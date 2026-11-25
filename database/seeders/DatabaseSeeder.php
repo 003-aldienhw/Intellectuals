@@ -18,17 +18,17 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@intellectuals.test',
             'phone' => '081234567890',
             'role' => 'petugas',
-            'status' => 'Aktif',
+            'status' => 'Petugas',
             'password' => Hash::make('password'),
         ]);
 
         User::create([
             'member_code' => 'A0104092008',
-            'name' => 'User1',
-            'email' => 'user1@intellectuals.test',
+            'name' => 'User',
+            'email' => 'user@intellectuals.test',
             'phone' => '089876543210',
             'role' => 'anggota',
-            'status' => 'Aktif',
+            'status' => 'Murid',
             'password' => Hash::make('password'),
         ]);
 
