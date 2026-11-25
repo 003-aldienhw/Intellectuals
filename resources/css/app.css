@@ -3,7 +3,32 @@
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 
+
+@font-face {
+    font-family: 'Kavoon';
+    src: url('/public/fonts/Kavoon-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Kay Pho Du';
+    src: url('/public/fonts/KayPhoDu-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Kay Pho Du';
+    src: url('/public/fonts/KayPhoDu-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-display: "Kavoon", ui-sans-serif, system-ui, sans-serif;
+    --font-sans: "Kay Pho Du", ui-sans-serif, system-ui, sans-serif;
 }
