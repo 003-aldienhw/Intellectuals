@@ -28,11 +28,6 @@ class AuthController extends Controller
         if (Auth::attempt(['name' => $credentials['name'], 'password' => $credentials['password']])) {
             $user = Auth::user();
 
-            if ($user->status !== 'Aktif') {
-                Auth::logout();
-                return back()->withErrors(['name' => 'Akun Anda berstatus Nonaktif. Hubungi petugas.'])->onlyInput('name');
-            }
-
             $request->session()->regenerate();
 
             return $user->role === 'petugas'
