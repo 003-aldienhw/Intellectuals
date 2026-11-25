@@ -14,8 +14,8 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->string('email')->nullable()->unique();
             $table->string('phone')->nullable();
+            $table->enum('role', ['anggota', 'petugas'])->default('anggota');
             $table->enum('status', ['Murid', 'Guru', 'Tamu', 'Petugas'])->default('Murid');
-            $table->enum('status', ['Aktif', 'Nonaktif'])->default('Aktif');
             $table->string('avatar')->nullable();
             $table->string('password');
             $table->rememberToken();
