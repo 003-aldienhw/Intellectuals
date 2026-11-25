@@ -2,42 +2,51 @@
 @section('title', 'Profil')
 @section('content')
     <x-staff_navbar />
-    <main class="pt-30 pl-60">
+    <main class="pt-30 pl-60 pr-5">
         <div class="flex flex-col items-center">
-            <img src="{{ asset('images/download-removebg-preview.png') }}" alt="ProfileIcon" width="200">
-            <h1 class="font-bold text-2xl mt-5">Admin</h1>
-            <div class="flex flex-wrap justify-center gap-10 mt-15">
+            <img src="{{ asset('images/download-removebg-preview.png') }}" alt="ProfileIcon" width="180">
+            <h1 class="font-bold text-2xl mt-3">{{ $staff->name }}</h1>
+
+            <div class="flex flex-wrap justify-center gap-10 mt-10">
                 <div>
-                    <h1>Nama</h1>
-                    <input type="text" class="bg-[#5B5B5B] w-120 h-10 p-1 rounded-lg text-[#666]" disabled>
+                    <h1 class="mb-1">Nama</h1>
+                    <input type="text" value="{{ $staff->name }}" class="bg-[#5B5B5B] w-110 h-10 px-3 rounded-lg text-white" disabled>
                 </div>
                 <div>
-                    <h1>Status</h1>
-                    <input type="text" class="bg-[#5B5B5B] w-120 h-10 p-1 rounded-lg text-[#666]" disabled>
+                    <h1 class="mb-1">Status</h1>
+                    <input type="text" value="{{ $staff->status }}" class="bg-[#5B5B5B] w-110 h-10 px-3 rounded-lg text-white" disabled>
                 </div>
                 <div>
-                    <h1>No Telepon</h1>
-                    <input type="text" class="bg-[#5B5B5B] w-120 h-10 p-1 rounded-lg text-[#666]" disabled>
+                    <h1 class="mb-1">No Telepon</h1>
+                    <input type="text" value="{{ $staff->phone ?? '-' }}" class="bg-[#5B5B5B] w-110 h-10 px-3 rounded-lg text-white" disabled>
                 </div>
                 <div>
-                    <h1>ID Petugas</h1>
-                    <input type="text" class="bg-[#5B5B5B] w-120 h-10 p-1 rounded-lg text-[#666]" disabled>
+                    <h1 class="mb-1">ID Petugas</h1>
+                    <input type="text" value="{{ $staff->member_code }}" class="bg-[#5B5B5B] w-110 h-10 px-3 rounded-lg text-white" disabled>
                 </div>
             </div>
-            <div class="flex gap-50 mt-10 mb-15">
-                <div class="flex flex-col p-5 justify-around text-center w-40 h-50 bg-[#5D7DFF] rounded-lg">
+
+            <div class="flex gap-20 mt-10 mb-10">
+                <div class="flex flex-col p-5 justify-around text-center w-44 h-44 bg-[#5D7DFF] rounded-lg">
                     <h1 class="font-bold text-[#00117E] text-lg">Buku yang Dipinjamkan</h1>
-                    <h1 class="font-bold text-[#00117E] text-lg">200</h1>
+                    <h1 class="font-bold text-[#00117E] text-2xl">{{ $approvedBooks }}</h1>
                 </div>
-                <div class="flex flex-col p-5 justify-around text-center w-40 h-50 bg-[#78FF5D] rounded-lg">
+                <div class="flex flex-col p-5 justify-around text-center w-44 h-44 bg-[#78FF5D] rounded-lg">
                     <h1 class="font-bold text-[#0F7E00] text-lg">Buku yang Diterima</h1>
-                    <h1 class="font-bold text-[#0F7E00] text-lg">-200</h1>
+                    <h1 class="font-bold text-[#0F7E00] text-2xl">{{ $receivedBooks }}</h1>
                 </div>
-                <div class="flex flex-col p-5 justify-around text-center w-40 h-50 bg-[#FF5D5D] rounded-lg">
+                <div class="flex flex-col p-5 justify-around text-center w-44 h-44 bg-[#FF5D5D] rounded-lg">
                     <h1 class="font-bold text-[#7E0000] text-lg">Denda yang Diberikan</h1>
-                    <h1 class="font-bold text-[#7E0000] text-lg">2000</h1>
+                    <h1 class="font-bold text-[#7E0000] text-xl">Rp {{ number_format($issuedFinesTotal, 0, ',', '.') }}</h1>
                 </div>
             </div>
+
+            <form method="POST" action="{{ route('logout') }}" class="mb-15">
+                @csrf
+                <button type="submit" class="bg-[#650000] hover:bg-red-800 text-[#FF2B2B] px-8 py-2.5 rounded-lg text-lg font-bold cursor-pointer transition">
+                    Logout
+                </button>
+            </form>
         </div>
     </main>
 @endsection

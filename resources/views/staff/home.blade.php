@@ -2,48 +2,43 @@
 @section('title', 'Beranda')
 @section('content')
     <x-staff_navbar />
-    <main class="pt-30 pl-60">
-        <div class="flex flex-col gap-10 mb-15">
-            <a href="/petugas/peminjaman"><div class="flex items-center bg-[#00117E] h-25 p-3 rounded-lg mr-3">
-                <img src="{{ asset('images/download-removebg-preview.png') }}" class="mr-3" alt="ProfileIcon" width="100">
-                <div class="flex flex-col gap-5">
-                    <h1 class="font-bold text-lg">User1</h1>
-                    <h1>Meminjam Buku1</h1>
+    <main class="pt-30 pl-60 pr-5">
+        @if (session('success'))
+            <div class="bg-[#137000] text-[#46FF21] p-4 rounded-lg mb-6 font-bold">{{ session('success') }}</div>
+        @endif
+
+        <div class="flex flex-col gap-6 mb-15">
+            @forelse ($activities as $activity)
+                @php
+                    $isBorrowing = $activity->status === 'pending';
+                    $route = $isBorrowing
+                        ? route('staff.borrowings.show', $activity)
+                        : route('staff.returnings.show', $activity);
+                    $bookTitles = $activity->details->map(fn ($d) => $d->book->title)->join(', ');
+                @endphp
+                <a href="{{ $route }}">
+                    <div class="flex items-center bg-[#00117E] hover:ring-2 hover:ring-[#213FFF] transition min-h-25 p-4 rounded-lg">
+                        <img src="{{ asset('images/download-removebg-preview.png') }}" class="mr-4" alt="ProfileIcon" width="80">
+                        <div class="flex flex-col gap-2">
+                            <h1 class="font-bold text-lg">{{ $activity->member->name }}</h1>
+                            <h1>
+                                {{ $isBorrowing ? 'Mengajukan Pinjam:' : 'Mengajukan Pengembalian:' }}
+                                <span class="font-bold">{{ $bookTitles }}</span>
+                            </h1>
+                        </div>
+                        <div class="ml-auto flex flex-col items-end gap-2">
+                            <h1>{{ $activity->updated_at->format('d/m/Y') }}</h1>
+                            <span class="px-3 py-1 rounded-lg text-xs font-bold {{ $isBorrowing ? 'bg-yellow-600/30 text-yellow-300' : 'bg-purple-600/40 text-purple-200' }}">
+                                {{ $isBorrowing ? 'Menunggu Persetujuan' : 'Ajuan Pengembalian' }}
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            @empty
+                <div class="bg-[#00117E] p-8 rounded-lg text-center">
+                    <p>Belum ada pengajuan peminjaman atau pengembalian yang menunggu konfirmasi.</p>
                 </div>
-                <div class="h-full ml-auto">
-                    <h1>10/09/2090</h1>
-                </div>
-            </div></a>
-            <a href="/petugas/pengembalian"><div class="flex items-center bg-[#00117E] h-25 p-3 rounded-lg mr-3">
-                <img src="{{ asset('images/download-removebg-preview.png') }}" class="mr-3" alt="ProfileIcon" width="100">
-                <div class="flex flex-col gap-5">
-                    <h1 class="font-bold text-lg">User2</h1>
-                    <h1>Mengembalikan Buku1</h1>
-                </div>
-                <div class="h-full ml-auto">
-                    <h1>10/09/2090</h1>
-                </div>
-            </div></a>
-            <a href="/petugas/pengembalian"><div class="flex items-center bg-[#00117E] h-25 p-3 rounded-lg mr-3">
-                <img src="{{ asset('images/download-removebg-preview.png') }}" class="mr-3" alt="ProfileIcon" width="100">
-                <div class="flex flex-col gap-5">
-                    <h1 class="font-bold text-lg">User3</h1>
-                    <h1>Mengembalikan Buku1</h1>
-                </div>
-                <div class="h-full ml-auto">
-                    <h1>10/09/2090</h1>
-                </div>
-            </div></a>
-            <a href="/petugas/peminjaman"><div class="flex items-center bg-[#00117E] h-25 p-3 rounded-lg mr-3">
-                <img src="{{ asset('images/download-removebg-preview.png') }}" class="mr-3" alt="ProfileIcon" width="100">
-                <div class="flex flex-col gap-5">
-                    <h1 class="font-bold text-lg">User4</h1>
-                    <h1>Meminjam Buku1</h1>
-                </div>
-                <div class="h-full ml-auto">
-                    <h1>10/09/2090</h1>
-                </div>
-            </div></a>
+            @endforelse
         </div>
     </main>
 @endsection
