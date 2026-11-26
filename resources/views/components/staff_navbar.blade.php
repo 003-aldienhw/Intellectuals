@@ -1,12 +1,20 @@
 @php
     $active_style = "bg-[#D9D9D9] text-[#00117E] font-bold";
 
-    [$searchAction, $searchPlaceholder] = match (true) {
-        request()->routeIs('staff.members.*') => [route('staff.members.index'), 'Cari Anggota...'],
-        request()->routeIs('staff.books.*') => [route('staff.books.index'), 'Cari Buku...'],
-        request()->routeIs('staff.categories.*') => [route('staff.categories.index'), 'Cari Kategori...'],
-        request()->routeIs('staff.fines.*') => [route('staff.fines.index'), 'Cari Denda...'],
-        default => [route('staff.home'), 'Cari Pengajuan / Buku...'],
+    $hasSearch = request()->routeIs(
+        'staff.home',
+        'staff.members.index',
+        'staff.books.index',
+        'staff.categories.index',
+        'staff.fines.index'
+    );
+
+    $searchPlaceholder = match (true) {
+        request()->routeIs('staff.members.index') => 'Cari Anggota...',
+        request()->routeIs('staff.books.index') => 'Cari Buku...',
+        request()->routeIs('staff.categories.index') => 'Cari Kategori...',
+        request()->routeIs('staff.fines.index') => 'Cari Denda...',
+        default => 'Cari Pengajuan / Buku...',
     };
 @endphp
 <nav class="fixed bg-[#00117E] h-full w-55 text-center shadow-xl/50 z-40">
@@ -21,15 +29,13 @@
     </div>
 </nav>
 <nav class="fixed flex ml-55 items-center bg-[#00117E] p-5 h-20 shadow-xl/20 w-[calc(100%-13.75rem)] z-30">
-    <form action="{{ $searchAction }}" method="GET" class="absolute left-1/2 -translate-x-1/2 flex items-center gap-2">
-        <input type="text" name="search" value="{{ request('search') }}" placeholder="{{ $searchPlaceholder }}"
-            class="bg-[#D9D9D9] w-70 h-10 px-3 rounded-lg text-[#000315] placeholder-[#666] focus:outline-none">
-        @if (request()->filled('search'))
-            <a href="{{ $searchAction }}" class="bg-[#213FFF] hover:bg-blue-600 px-3 h-10 flex items-center rounded-lg text-sm font-bold">
-                Reset
-            </a>
-        @endif
-    </form>
+    @if ($hasSearch)
+        <div class="absolute left-1/2 -translate-x-1/2">
+            <input type="text" id="staffSearchInput" placeholder="{{ $searchPlaceholder }}"
+                class="bg-[#D9D9D9] w-70 h-10 px-3 rounded-lg text-[#000315] placeholder-[#666] focus:outline-none">
+        </div>
+    @endif
+
     <div class="ml-auto flex items-center gap-3">
         <div class="bg-[#8B0000] text-[#FF5D5D] px-2 py-1 mr-1 rounded-lg">
             <h1 class="font-display text-sm">Petugas</h1>

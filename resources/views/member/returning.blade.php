@@ -10,7 +10,7 @@
         <div class="flex flex-col gap-6 mb-15">
             @forelse ($borrowings as $borrowing)
                 @php $book = $borrowing->details->first()?->book; @endphp
-                <a href="{{ route('member.returning.details', $borrowing) }}">
+                <a href="{{ route('member.returning.details', $borrowing) }}" class="member-searchable" data-search="{{ strtolower(($book?->title ?? '') . ' ' . $borrowing->borrow_date->format('d/m/Y') . ' ' . ($borrowing->due_date?->format('d/m/Y') ?? '')) }}">
                     <div class="flex items-center bg-[#00117E] hover:ring-2 hover:ring-[#213FFF] transition min-h-25 p-4 rounded-lg">
                         @if ($book?->cover)
                             <img src="{{ asset('storage/' . $book->cover) }}" alt="{{ $book->title }}" class="w-20 h-22 object-cover rounded-lg mr-4">
@@ -38,4 +38,12 @@
             @endforelse
         </div>
     </main>
+    <script>
+        document.getElementById('memberSearchInput')?.addEventListener('input', function () {
+            const q = this.value.toLowerCase().trim();
+            document.querySelectorAll('.member-searchable').forEach(el => {
+                el.style.display = (!q || el.dataset.search.includes(q)) ? '' : 'none';
+            });
+        });
+    </script>
 @endsection

@@ -73,4 +73,24 @@
             </div>
         </div>
     </main>
+    <script>
+        function filterBooks() {
+            const query = (document.getElementById('memberSearchInput')?.value || '').toLowerCase().trim();
+            const cards = document.querySelectorAll('.book-card');
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const matchesCategory = !activeCategoryId || card.dataset.category === activeCategoryId;
+                const matchesSearch = !query || card.dataset.search.includes(query);
+                const show = matchesCategory && matchesSearch;
+
+                card.style.display = show ? '' : 'none';
+                if (show) visibleCount++;
+            });
+
+            document.getElementById('emptyFilterState').classList.toggle('hidden', visibleCount > 0 || cards.length === 0);
+        }
+
+        document.getElementById('memberSearchInput')?.addEventListener('input', filterBooks);
+    </script>
 @endsection

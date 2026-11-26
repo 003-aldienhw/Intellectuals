@@ -71,4 +71,12 @@
             </div>
         </div>
     </main>
+    <script>
+        document.getElementById('staffSearchInput')?.addEventListener('input', function () {
+            const q = this.value.toLowerCase().trim();
+            document.querySelectorAll('.searchable-item').forEach(el => {
+                el.style.display = (!q || el.dataset.search.includes(q)) ? '' : 'none';
+            });
+        });
+    </script>
 @endsection

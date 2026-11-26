@@ -104,6 +104,12 @@
     </main>
 
     <script>
+        document.getElementById('staffSearchInput')?.addEventListener('input', function () {
+            const q = this.value.toLowerCase().trim();
+            document.querySelectorAll('.searchable-item').forEach(el => {
+                el.style.display = (!q || el.dataset.search.includes(q)) ? '' : 'none';
+            });
+        });
         function addViolationRow(containerId) {
             const container = document.getElementById(containerId);
             const row = document.createElement('div');

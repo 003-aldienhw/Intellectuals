@@ -13,47 +13,41 @@ use Illuminate\Support\Facades\DB;
 
 class MemberController extends Controller
 {
-    public function home(Request $request)
+    public function home()
     {
         $categories = Category::orderBy('name')->get();
-        $selectedCategory = null;
+        $books = Book::with('category')->latest()->get();
 
-        $booksQuery = Book::with('category')->latest();
-
-        if ($request->filled('category')) {
-            $booksQuery->where('category_id', $request->category);
-            $selectedCategory = Category::find($request->category);
-        }
-
-        if ($request->filled('search')) {
-            $search = $request->search;
-            $booksQuery->where(function ($q) use ($search) {
-                $q->where('title', 'like', "%{$search}%")
-                  ->orWhere('author', 'like', "%{$search}%")
-                  ->orWhere('isbn', 'like', "%{$search}%");
-            });
-        }
-
-        $books = $booksQuery->get();
-
-        return view('member.home', compact('books', 'categories', 'selectedCategory'));
+        return view('member.home', compact('books', 'categories'));
     }
 
     public function showBorrowing(Book $book)
     {
         $book->load('category');
-        $user = Auth::user();
+        $activeBorrowing = null;
 
-        $activeBorrowing = Borrowing::where('user_id', $user->id)
-            ->whereIn('status', ['pending', 'approved', 'return_pending'])
-            ->whereHas('details', fn ($q) => $q->where('book_id', $book->id))
-            ->first();
+        if (Auth::check() && Auth::user()->role === 'anggota') {
+            $activeBorrowing = Borrowing::where('user_id', Auth::id())
+                ->whereIn('status', ['pending', 'approved', 'return_pending'])
+                ->whereHas('details', fn ($q) => $q->where('book_id', $book->id))
+                ->first();
+        }
 
         return view('member.borrowing', compact('book', 'activeBorrowing'));
     }
 
     public function storeBorrowing(Request $request, Book $book)
     {
+        if (!Auth::check()) {
+            return redirect()->route('login')
+                ->with('error', 'Meminjam harus login terlebih dahulu');
+        }
+
+        if (Auth::user()->role === 'petugas') {
+            return redirect()->route('staff.home')
+                ->with('error', 'Petugas tidak dapat meminjam buku');
+        }
+
         if ($book->stock < 1) {
             return back()->with('error', 'Stok buku sedang habis.');
         }
@@ -110,7 +104,6 @@ class MemberController extends Controller
     {
         abort_if($fine->user_id !== Auth::id(), 403);
         $fine->load(['borrowing.details.book.category']);
-
         $book = $fine->borrowing?->details->first()?->book;
 
         return view('member.fine_details', compact('fine', 'book'));

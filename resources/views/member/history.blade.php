@@ -10,11 +10,11 @@
         @if ($unpaidFines->isNotEmpty())
             <div class="bg-[#650000] border border-[#FF5D5D] text-white p-4 rounded-lg mb-8 flex items-center justify-between gap-4">
                 <div>
-                    <h1 class="font-bold text-lg text-[#FF5D5D]">Peringatan Denda Aktif!</h1>
+                    <h1 class="font-bold text-lg text-[#FF5D5D]">Peringatan Denda!</h1>
                     <p class="text-sm mt-1">
                         Kamu memiliki {{ $unpaidFines->count() }} denda belum dibayar dengan total
                         <span class="font-bold text-[#FF5D5D]">Rp {{ number_format($unpaidFines->sum('total_amount'), 0, ',', '.') }}</span>.
-                        Klik denda di bawah untuk melihat detail dan tata cara pembayaran langsung ke petugas.
+                        Segera lunaskan dengan pembayaran langsung ke petugas.
                     </p>
                 </div>
                 <a href="{{ route('member.fine.details', $unpaidFines->first()) }}"
@@ -29,7 +29,7 @@
             <div class="flex flex-col gap-4 mb-10">
                 @foreach ($fines as $fine)
                     @php $fineBook = $fine->borrowing?->details->first()?->book; @endphp
-                    <a href="{{ route('member.fine.details', $fine) }}">
+                    <a href="{{ route('member.fine.details', $fine) }}" class="member-searchable" data-search="{{ strtolower(($fineBook?->title ?? 'denda umum') . ' ' . implode(' ', $fine->violations) . ' ' . ($fine->status === 'paid' ? 'sudah dibayar' : 'belum dibayar')) }}">
                         <div class="flex items-center bg-[#00117E] border {{ $fine->status === 'unpaid' ? 'border-[#FF5D5D]' : 'border-transparent' }} hover:ring-2 hover:ring-[#213FFF] transition min-h-24 p-4 rounded-lg">
                             @if ($fineBook?->cover)
                                 <img src="{{ asset('storage/' . $fineBook->cover) }}" alt="{{ $fineBook->title }}" class="w-18 h-20 object-cover rounded-lg mr-4">
@@ -67,7 +67,7 @@
                         'rejected' => ['text' => 'Ditolak', 'class' => 'bg-[#650000] text-[#FF5D5D]'],
                     };
                 @endphp
-                <div class="flex items-center bg-[#00117E] min-h-25 p-4 rounded-lg">
+                <div class="flex items-center bg-[#00117E] min-h-25 p-4 rounded-lg member-searchable" data-search="{{ strtolower(($book?->title ?? '') . ' ' . $statusLabel['text'] . ' ' . $borrowing->borrow_date->format('d/m/Y')) }}">
                     @if ($book?->cover)
                         <img src="{{ asset('storage/' . $book->cover) }}" alt="{{ $book->title }}" class="w-20 h-22 object-cover rounded-lg mr-4">
                     @else
@@ -95,4 +95,12 @@
             @endforelse
         </div>
     </main>
+    <script>
+        document.getElementById('memberSearchInput')?.addEventListener('input', function () {
+            const q = this.value.toLowerCase().trim();
+            document.querySelectorAll('.member-searchable').forEach(el => {
+                el.style.display = (!q || el.dataset.search.includes(q)) ? '' : 'none';
+            });
+        });
+    </script>
 @endsection

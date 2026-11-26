@@ -7,6 +7,10 @@
             <div class="bg-[#137000] text-[#46FF21] p-4 rounded-lg mb-6 font-bold">{{ session('success') }}</div>
         @endif
 
+        @if (session('error'))
+            <div class="bg-[#650000] text-[#FF5D5D] p-4 rounded-lg mb-6 font-bold">{{ session('error') }}</div>
+        @endif
+
         <div class="flex flex-col gap-6 mb-15">
             @forelse ($activities as $activity)
                 @php
@@ -23,7 +27,7 @@
                             <h1 class="font-bold text-lg">{{ $activity->member->name }}</h1>
                             <h1>
                                 {{ $isBorrowing ? 'Mengajukan Pinjam:' : 'Mengajukan Pengembalian:' }}
-                                <span class="font-bold">{{ $bookTitles }}</span>
+                                <span class="font-bold">{{ $book?->title ?? 'Buku Dihapus' }}</span>
                             </h1>
                         </div>
                         <div class="ml-auto flex flex-col items-end gap-2">
@@ -41,4 +45,12 @@
             @endforelse
         </div>
     </main>
+    <script>
+        document.getElementById('staffSearchInput')?.addEventListener('input', function () {
+            const q = this.value.toLowerCase().trim();
+            document.querySelectorAll('.searchable-item').forEach(el => {
+                el.style.display = (!q || el.dataset.search.includes(q)) ? '' : 'none';
+            });
+        });
+    </script>
 @endsection

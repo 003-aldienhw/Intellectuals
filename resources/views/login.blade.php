@@ -6,6 +6,12 @@
             @csrf
             <h1 class="font-display text-4xl text-center mb-10">Intellectuals</h1>
 
+            @if (session('error'))
+                <div class="bg-[#650000] text-[#FF5D5D] px-3 py-2 rounded-lg mb-4 text-sm w-70 font-bold">
+                    {{ session('error') }}
+                </div>
+            @endif
+
             @if ($errors->any())
                 <div class="bg-[#650000] text-[#FF5D5D] px-3 py-2 rounded-lg mb-4 text-sm w-70">
                     {{ $errors->first() }}
@@ -20,10 +26,13 @@
             <input type="password" name="password" required
                 class="bg-[#D9D9D9] w-70 h-10 px-3 rounded-lg text-[#000315] font-medium focus:outline-none">
 
-            <div class="flex justify-center mt-12">
-                <button type="submit" class="bg-[#213FFF] hover:bg-blue-600 cursor-pointer w-32 h-10 flex justify-center items-center rounded-lg text-lg font-bold transition">
+            <div class="flex flex-col items-center gap-3 mt-10">
+                <button type="submit" class="bg-[#213FFF] hover:bg-blue-600 cursor-pointer w-36 h-10 flex justify-center items-center rounded-lg text-lg font-bold transition">
                     Login
                 </button>
+                <a href="{{ route('member.home') }}" class="text-sm text-blue-200 hover:text-white underline transition">
+                    Lihat daftar buku
+                </a>
             </div>
         </form>
     </main>
