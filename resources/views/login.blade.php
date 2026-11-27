@@ -7,13 +7,13 @@
             <h1 class="font-display text-4xl text-center mb-10">Intellectuals</h1>
 
             @if (session('error'))
-                <div class="bg-[#650000] text-[#FF5D5D] px-3 py-2 rounded-lg mb-4 text-sm w-70 font-bold">
+                <div class="bg-[#650000] text-center text-[#FF5D5D] px-3 py-2 rounded-lg mb-4 text-sm w-70 font-bold">
                     {{ session('error') }}
                 </div>
             @endif
 
             @if ($errors->any())
-                <div class="bg-[#650000] text-[#FF5D5D] px-3 py-2 rounded-lg mb-4 text-sm w-70">
+                <div class="bg-[#650000] text-center text-[#FF5D5D] px-3 py-2 rounded-lg mb-4 text-sm w-70">
                     {{ $errors->first() }}
                 </div>
             @endif

@@ -18,7 +18,7 @@
 
         <div class="flex flex-col gap-6 mb-15">
             @forelse ($categories as $category)
-                <a href="{{ route('staff.categories.show', $category) }}">
+                <a href="{{ route('staff.categories.show', $category) }}" class="searchable-item" data-search="{{ strtolower($category->name . ' ' . $category->category_code . ' ' . $category->status) }}">
                     <div class="flex items-center bg-[#00117E] hover:ring-2 hover:ring-[#213FFF] transition h-25 p-3 rounded-lg">
                         @if ($category->image)
                             <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}" class="w-20 h-22 object-cover rounded-lg mr-4">
@@ -36,6 +36,9 @@
                         </div>
                     </div>
                 </a>
+                <div id="emptySearchState" class="hidden bg-[#00117E] p-8 rounded-lg text-center mb-15">
+                    <p class="text-lg">Data tidak ditemukan.</p>
+                </div>
             @empty
                 <div class="bg-[#00117E] p-8 rounded-lg text-center">Belum ada kategori.</div>
             @endforelse
@@ -68,9 +71,19 @@
     <script>
         document.getElementById('staffSearchInput')?.addEventListener('input', function () {
             const q = this.value.toLowerCase().trim();
-            document.querySelectorAll('.searchable-item').forEach(el => {
-                el.style.display = (!q || el.dataset.search.includes(q)) ? '' : 'none';
+            const items = document.querySelectorAll('.searchable-item');
+            let visibleCount = 0;
+
+            items.forEach(el => {
+                const matches = !q || (el.dataset.search || '').includes(q);
+                el.style.display = matches ? '' : 'none';
+                if (matches) visibleCount++;
             });
+
+            const emptyState = document.getElementById('emptySearchState');
+            if (emptyState) {
+                emptyState.classList.toggle('hidden', visibleCount > 0 || items.length === 0);
+            }
         });
     </script>
 @endsection

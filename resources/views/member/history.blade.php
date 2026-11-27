@@ -88,6 +88,9 @@
                         @endif
                     </div>
                 </div>
+                <div id="emptyMemberSearchState" class="hidden bg-[#00117E] p-8 rounded-lg text-center mb-15">
+                    <p class="text-lg">Data tidak ditemukan.</p>
+                </div>
             @empty
                 <div class="bg-[#00117E] p-8 rounded-lg text-center">
                     <p>Belum ada riwayat peminjaman buku.</p>
@@ -98,9 +101,19 @@
     <script>
         document.getElementById('memberSearchInput')?.addEventListener('input', function () {
             const q = this.value.toLowerCase().trim();
-            document.querySelectorAll('.member-searchable').forEach(el => {
-                el.style.display = (!q || el.dataset.search.includes(q)) ? '' : 'none';
+            const items = document.querySelectorAll('.member-searchable');
+            let visibleCount = 0;
+
+            items.forEach(el => {
+                const matches = !q || (el.dataset.search || '').includes(q);
+                el.style.display = matches ? '' : 'none';
+                if (matches) visibleCount++;
             });
+
+            const emptyState = document.getElementById('emptyMemberSearchState');
+            if (emptyState) {
+                emptyState.classList.toggle('hidden', visibleCount > 0 || items.length === 0);
+            }
         });
     </script>
 @endsection
